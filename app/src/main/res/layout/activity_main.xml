@@ -55,16 +55,23 @@
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
+                android:layout_weight="1"
                 android:text="Set"
                 android:id="@+id/setbtn"/>
 
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
+                android:layout_weight="1"
                 android:text="clear"
                 android:id="@+id/clearbtn"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="stop"
+                android:id="@+id/stopbtn"/>
 
         </LinearLayout>
 

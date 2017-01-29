@@ -34,6 +34,8 @@ public class RateService extends IntentService {
     public static final int STATUS_REFRESHED = 1;
     public static final int STATUS_ERROR = 2;
 
+    public static volatile boolean IS_RUNNING = true;
+
     private static final String TAG = "RateService";
 
     private AlarmManager alarmManager;
@@ -46,30 +48,29 @@ public class RateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "Service Started!");
+        if(IS_RUNNING) {
 
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-        String url = intent.getStringExtra("url");
+            final ResultReceiver receiver = intent.getParcelableExtra("receiver");
+            String url = intent.getStringExtra("url");
 
-        Bundle bundle = new Bundle();
+            Bundle bundle = new Bundle();
 
-        if (!TextUtils.isEmpty(url)) {
-            receiver.send(STATUS_RUNNING, Bundle.EMPTY);
+            if (!TextUtils.isEmpty(url)) {
+                //receiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
-            try {
-                ArrayList<String> result = fetchRate(url + "?" + System.currentTimeMillis());
+                try {
+                    ArrayList<String> result = fetchRate(url + "?" + System.currentTimeMillis());
 
-                if (result != null) {
-                    bundle.putStringArrayList("result", result);
-                    //bundle.pu
-                    receiver.send(STATUS_REFRESHED, bundle);
+                    if (result != null) {
+                        bundle.putStringArrayList("result", result);
+                        receiver.send(STATUS_REFRESHED, bundle);
+                    }
+                } catch (Exception e) {
+//                    bundle.putString(Intent.EXTRA_TEXT, e.toString());
+//                    receiver.send(STATUS_ERROR, bundle);
                 }
-            } catch (Exception e) {
-                bundle.putString(Intent.EXTRA_TEXT, e.toString());
-                receiver.send(STATUS_ERROR, bundle);
             }
         }
-
         alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         pendingIntent = PendingIntent.getService(
@@ -80,7 +81,7 @@ public class RateService extends IntentService {
 
         Calendar time = Calendar.getInstance();
         time.setTimeInMillis(System.currentTimeMillis());
-        time.add(Calendar.SECOND, 15);
+        time.add(Calendar.SECOND, 10);
 
         alarmManager.set (
                 AlarmManager.RTC_WAKEUP,

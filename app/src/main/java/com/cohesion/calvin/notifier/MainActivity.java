@@ -48,8 +48,6 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        mp = MediaPlayer.create(getApplicationContext(), notification);
         nfManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -76,9 +74,6 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
                         rateTxt.setSelection(s.length() - 3, s.length());
 
                         rateTxt2.setText("0");
-//                        InputMethodManager imm = (InputMethodManager)
-//                                getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
                     }
 
                 }
@@ -136,6 +131,24 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
             }
         });
 
+        final Button stopBtn = (Button) findViewById(R.id.stopbtn);
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(RateService.IS_RUNNING) {
+                    synchronized (Rate.Cache) {
+                        RateService.IS_RUNNING = false;
+                        stopBtn.setText("resume");
+                    }
+                } else {
+                    synchronized (Rate.Cache) {
+                        RateService.IS_RUNNING = true;
+                        stopBtn.setText("stop");
+                    }
+                }
+
+            }
+        });
+
         receiver = new RateResultReceiver(new Handler());
         receiver.setReceiver(this);
         Intent intent = new Intent(Intent.ACTION_SYNC, null, this, RateService.class);
@@ -149,12 +162,7 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
-            case RateService.STATUS_RUNNING:
-
-                setProgressBarIndeterminateVisibility(true);
-                break;
             case RateService.STATUS_REFRESHED:
-                setProgressBarIndeterminateVisibility(false);
 
                 ArrayList<String> result = resultData.getStringArrayList("result");
                 StringBuilder txt = new StringBuilder();
