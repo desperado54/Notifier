@@ -28,6 +28,17 @@ public class Rate {
     public double bid;
     public short trend;
 
+    //optional
+    public double bid2;
+
+    public double getBid2() {
+        return bid2;
+    }
+
+    public void setBid2(double bid2) {
+        this.bid2 = bid2;
+    }
+
     public short getTrend() {
         return trend;
     }

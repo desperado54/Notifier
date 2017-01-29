@@ -6,55 +6,78 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:maxLines="16"
-        android:scrollbars="vertical"
-        android:minHeight="320dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/setbtn" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rate"
-        android:width="180dp"
-        android:inputType="numberDecimal"
-        android:digits="0123456789."
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/textView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set"
-        android:id="@+id/setbtn"
-        android:width="200dp"
-        android:layout_marginTop="33dp"
-        android:layout_toStartOf="@+id/rate" />
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:layout_gravity="center_vertical"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="clear"
-        android:id="@+id/clearbtn"
-        android:width="200dp"
-        android:layout_alignBottom="@+id/setbtn"
-        android:layout_alignStart="@+id/rate"
-        android:nestedScrollingEnabled="false" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/rate"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="center_vertical"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/rate"
-        android:layout_toStartOf="@+id/rate" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/rate2"
+                android:inputType="numberDecimal"
+                android:digits="0123456789."
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="3dp">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="Set"
+                android:id="@+id/setbtn"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="clear"
+                android:id="@+id/clearbtn"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:maxLines="16"
+            android:scrollbars="vertical"
+            android:minHeight="320dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

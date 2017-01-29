@@ -34,6 +34,7 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
     private TextView textView;
     private Spinner cpSpinner;
     private EditText rateTxt;
+    private EditText rateTxt2;
     private Button setBtn;
 
     private static final String TAG = "MainActivity";
@@ -57,6 +58,7 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
         textView = (TextView) findViewById(R.id.textView);
         cpSpinner = (Spinner) findViewById(R.id.spinner);
         rateTxt = (EditText) findViewById(R.id.rate);
+        rateTxt2 = (EditText) findViewById(R.id.rate2);
         setBtn = (Button) findViewById(R.id.setbtn);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Rate.ObserveList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -72,10 +74,13 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
                     if (rateTxt.requestFocus()) {
                         rateTxt.setText(s);
                         rateTxt.setSelection(s.length() - 3, s.length());
+
+                        rateTxt2.setText("0");
 //                        InputMethodManager imm = (InputMethodManager)
 //                                getSystemService(Context.INPUT_METHOD_SERVICE);
 //                        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
                     }
+
                 }
             }
             @Override
@@ -103,12 +108,24 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
                         r.setBid(d);
                         r.trend = trend;
                         r.cp = cp;
+
+                        double d2 = 0.0d;
+                        try {
+                            d2 = Double.parseDouble(rateTxt2.getText().toString().trim());
+                        } catch(Exception e)
+                        {
+                            ;
+                        }
+                        if(d2 != 0) {
+                            r.bid2 = d2;
+                        }
                         WATCHLIST.put(cp, r);
 
                     }
                 } else {
                     WATCHLIST.remove(cp);
                 }
+
             }
         });
 
@@ -148,8 +165,15 @@ public class MainActivity extends Activity implements RateResultReceiver.Receive
                     double currBid = new Double(ss[1]);
                     if(WATCHLIST.keySet().contains(ss[0])) {
                         Double watchBid = WATCHLIST.get(ss[0]).getBid();
+                        Double watchBid2 = WATCHLIST.get(ss[0]).getBid2();
                         short trend = WATCHLIST.get(ss[0]).getTrend();
-                        if(currBid > watchBid && trend == 1 || currBid < watchBid && trend == -1) {
+                        if(watchBid != 0 && watchBid2 != 0) {
+                            if(((watchBid > watchBid2) && (currBid > watchBid || currBid < watchBid2))
+                                    || ((watchBid < watchBid2) && (currBid > watchBid2 || currBid < watchBid))) {
+                                nfTxt.append(String.format("%s: %s $$$$$\n", cp, currBid));
+                                txt.append(String.format("%s    %s    %s    $$$$$\n", cp, currBid, watchBid));
+                            }
+                        } else if(currBid > watchBid && trend == 1 || currBid < watchBid && trend == -1) {
                             //mp.start();
                             nfTxt.append(String.format("%s: %s $$$$$\n", cp, currBid));
                             txt.append(String.format("%s    %s    %s    $$$$$\n", cp, currBid, watchBid));
